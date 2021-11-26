@@ -1,6 +1,7 @@
 <template>
     <div class="smap">
         <span>{{ smap.name }}</span>
+        <code>{{ smap.smapId }}</code>
         <div class="fetching" v-if="webhook === null">fetching...</div>
         <div class="no-webhook" v-if="webhook === false">no webhook</div>
         <div v-if="typeof webhook === 'object'">
