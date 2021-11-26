@@ -5,7 +5,7 @@
         <div class="fetching" v-if="webhook === null">fetching...</div>
         <div class="no-webhook" v-if="webhook === false">no webhook</div>
         <div v-if="typeof webhook === 'object'">
-            <div v-if="(typeof webhook.options !== 'undefined')">
+            <div v-if="webhook.options && (typeof webhook.options !== 'undefined')">
                 <div v-if="webhook.options === 'HttpGet'">
                     <code class="method method-get">get</code> <input type="text" :value="webhook.serverUrl">
                 </div>
