@@ -1,16 +1,38 @@
 <template>
-    <div class="smap">
-        <span>{{ smap.name }}</span>
-        <code>{{ smap.smapId }}</code>
-        <div class="fetching" v-if="webhook === null">fetching...</div>
-        <div class="no-webhook" v-if="webhook === false">no webhook</div>
-        <div v-if="typeof webhook === 'object'">
-            <div v-if="webhook.options && (typeof webhook.options !== 'undefined')">
-                <div v-if="webhook.options === 'HttpGet'">
-                    <code class="method method-get">get</code> <input type="text" :value="webhook.serverUrl">
-                </div>
-                <div v-if="webhook.options === 'HttpPost'">
-                    <code class="method method-post">post</code> <input type="text" :value="webhook.serverUrl">
+    <div v-if="smap" class="smap" :class="{
+        webhook: webhook,
+        fetching: webhook === null,
+        'no-webhook': webhook === false,
+    }">
+        <div class="smap-name" @click="showMeta = !showMeta">
+            {{ smap.name }}
+            <span class="info-no-webhook" v-if="webhook === false">no webhook</span>
+        </div>
+        
+        <div class="info-fetching" v-if="webhook === null">fetching...</div>
+
+        <div class="smap-meta" v-if="showMeta">
+            <div><code>{{ smap.smapId }}</code></div>
+            <hr>
+            <div>Last changed: {{ smap.lastChanged }}</div>
+            <div v-if="smap.lastPublishedVersion">Version: {{ smap.lastPublishedVersion.version }}</div>
+            <hr>
+            <div>Installations: {{ smap.installationsCount }}</div>
+            <div>User licenses: {{ smap.userLicenseCount }}</div>
+            <div>Data entries: {{ smap.totalDataCount }}</div>
+            <div v-if="webhook">
+                <hr>
+                <div>Webhook URL</div>
+                <div><input type="text" :value="webhook.serverUrl"></div>
+            </div>
+        </div>
+
+        <div v-if="webhook">
+            <div v-if="webhook.options">
+                <div>
+                    <code v-if="webhook.options === 'HttpGet'" class="method method-get">get</code>
+                    <code v-if="webhook.options === 'HttpPost'" class="method method-post">post</code>
+                    <span class="webhook-url">{{ getReadableUrl(webhook.serverUrl) }}</span>
                 </div>
             </div>
         </div>
@@ -23,7 +45,8 @@ export default {
     // components: {},
     data() {
         return {
-            webhook: null
+            webhook: null,
+            showMeta: false
         }
     },
     props: {
@@ -31,8 +54,7 @@ export default {
         token: String
     },
     async created() {
-        console.log({"smap": this.smap})
-        console.log('TYPEOF', typeof this.webhook)
+        console.log(this.smap)
         console.log(`Checking webhook for smapId ${this.smap.smapId}`)
         let url = `https://platform.smapone.com/Backend/intern/Smaps/${this.smap.smapId}/Notification/Data/Webhook?accessToken=${this.token}`
         // console.log(url)
@@ -46,23 +68,67 @@ export default {
                     this.webhook = data
                 }
             })
+    },
+    methods: {
+        getReadableUrl(url) {
+            const lead = url.substr(0, 32)
+            const trail = url.substr(url.length-16, url.length)
+            return `${lead}...${trail}`;
+        }
     }
 }
 </script>
 
 <style scoped>
 .smap {
+    padding: 4rem 3rem;
+    width: 100%;
+}
+
+.smap:hover {
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.smap-name {
+    font-size: 1.5rem;
+    cursor: default;
+    margin-bottom: .5rem;
+}
+
+.smap-meta {
+    background: #666;
+    color: white;
+    padding: 2rem;
     margin-bottom: 2rem;
 }
 
+.smap-meta input {
+    width: 100%;
+}
+
+/* .webhook {} */
+
 .fetching, .no-webhook {
+    color: #999;
+}
+
+.info-no-webhook {
     font-size: 1rem;
-    color: #c3c3c3;
+    color: #666;
+}
+
+.info-fetching {
+    font-size: 1rem;
+    color: #666;
+}
+
+.webhook-url {
+    margin-left: .4rem;
+    font-size: 1.2rem;
 }
 
 .method {
     display: inline-block;
-    background-color: green;
     font-size: 1rem;
     padding: 0.2rem 0.5rem;
 }

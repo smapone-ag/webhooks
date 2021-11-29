@@ -1,5 +1,14 @@
 <template>
-    <div v-if="token !== null">
+    <div class="box settings">
+        <select name="filter-webhooks" id="filter-webhooks">
+            <option value="all">show all</option>
+            <option value="all-webhooks">all webhooks</option>
+            <option value="all-post-webhooks">all POST webhooks</option>
+            <option value="all-get-webhooks">all GET webhooks</option>
+            <option value="no-webhooks">smaps without webhook</option>
+        </select>
+    </div>
+    <div class="box">
         <smap-item
             v-for="smap in smaps"
             :key="smap.smapId"
@@ -34,11 +43,29 @@ export default {
             .then(response => response.json())
             .then(data => {
                 console.log('Fetched smaps data', {data})
-                this.smaps = data
+                this.smaps = data.sort((a, b) => {
+                    let nameA = a.name.toLowerCase(),
+                        nameB = b.name.toLowerCase();
+
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0;
+                });
+
             })
     }
 }
 </script>
 
 <style scoped>
+.settings {
+    place-content: center;
+    font-size: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
 </style>

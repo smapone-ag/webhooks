@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="box">
+        <div class="box token-input" :class="{'token-entered': token}">
             Enter token here<br>
             <input v-model="token">
             
@@ -13,11 +13,8 @@
                 </ul>    
             </div>
         </div>
-        <div class="box" v-if="token !== null">
-            <smap-list :token="token"></smap-list>
-        </div>
+        <smap-list v-if="token" :token="token"></smap-list>
     </div>
-    
 </template>
 
 <script>
@@ -40,10 +37,9 @@ export default {
         
         // Parse token parameter
         if(urlParams.has('token')) {
-            this.config.channel = urlParams.get('token');
+            this.token = urlParams.get('token');
         }
-    },
-    // methods: {}
+    }
 }
 </script>
 
@@ -97,19 +93,25 @@ a:hover {
 .box {
     display: flex;
     background-color: #444;
-    margin-bottom: 2rem;
-    padding: 4rem 4rem;
+    margin-bottom: .3rem;
+    padding: 0;
     overflow-x: hidden;
     flex-direction: column;
     flex-wrap: wrap;
     align-content: flex-start;
-    align-items: center;
-    max-width: 600px;
+    max-width: 680px;
     width: 100%;
 }
 
-.box:first-child {
+.box.token-input {
     place-content: center;
+}
+
+.box.token-entered {
+    color: #999;
+    font-size: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 /* Responsiveness */
