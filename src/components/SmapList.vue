@@ -1,5 +1,5 @@
 <template>
-    <div class="box settings">
+    <!-- <div class="box settings">
         <select name="filter-webhooks" id="filter-webhooks">
             <option value="all">show all</option>
             <option value="all-webhooks">all webhooks</option>
@@ -7,7 +7,7 @@
             <option value="all-get-webhooks">all GET webhooks</option>
             <option value="no-webhooks">smaps without webhook</option>
         </select>
-    </div>
+    </div> -->
     <div class="box">
         <smap-item
             v-for="smap in smaps"
