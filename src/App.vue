@@ -1,15 +1,15 @@
 <template>
     <div class="container">
         <div class="box token-input" :class="{'token-entered': token}">
-            Enter token here<br>
-            <input v-model="token">
+            Enter your smapOne API token here<br>
+            <input type="text" v-model="token">
             
-            <div v-if="token === null">
+            <div v-if="token === null" class="token-info">
                 Is it safe to enter token here?
 
                 <ul>
                     <li>This script runs on github, only allows frontend, no backend services, you can track all calls done by the frontend.</li>
-                    <li>If you don't trust, feel free to use the script and run by yourself.</li>
+                    <li>If you don't trust, feel free to <a href="https://github.com/moritzhesse/webhooks">download the script</a> and to compile and run by yourself.</li>
                 </ul>    
             </div>
         </div>
@@ -105,6 +105,7 @@ a:hover {
 
 .box.token-input {
     place-content: center;
+    padding: 4rem;
 }
 
 .box.token-entered {
@@ -112,6 +113,12 @@ a:hover {
     font-size: 1rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
+}
+
+.token-info {
+    color: #999;
+    font-size: 1rem;
+    margin-top: 3rem;
 }
 
 /* Responsiveness */
