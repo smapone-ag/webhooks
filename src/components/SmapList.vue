@@ -21,7 +21,6 @@
 </template>
 
 <script>
-// import moment from 'moment';
 import SmapItem from './SmapItem.vue';
 
 export default {
