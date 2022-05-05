@@ -8,8 +8,8 @@
                 Is it safe to enter token here?
 
                 <ul>
-                    <li>This script runs on github, only allows frontend, no backend services, you can track all calls done by the frontend.</li>
-                    <li>If you don't trust, feel free to <a href="https://github.com/moritzhesse/webhooks">download the script</a> and to compile and run by yourself.</li>
+                    <li>This script runs on github (which only allows frontend, no backend services), you can track all calls done by the frontend in your browser console.</li>
+                    <li>If you don't trust this application, feel free to <a href="https://github.com/moritzhesse/webhooks">download the script</a> and to compile and run by yourself.</li>
                 </ul>    
             </div>
         </div>
