@@ -13,7 +13,7 @@
             v-for="smap in smaps"
             :key="smap.smapId"
             :smap="smap"
-            :token="token"
+            :api="api"
             class="smap"
         >
         </smap-item>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import SmapItem from './SmapItem.vue';
+import SmapItem from './SmapItem.vue'
 
 export default {
     name: 'SmapList',
@@ -34,17 +34,15 @@ export default {
         }
     },
     props: {
-        token: String
+        api: Object
     },
     async created() {
-        fetch(`https://platform.smapone.com/Backend/v1/Smaps?accessToken=${this.token}`)
-            .then(response => response.json())
-            .then(data => {
-                this.smaps = data.sort((a, b) => {
-                    return a.name.localeCompare(b.name);
-                });
-
+        let data = await this.api.getSmaps()
+        if(data !== null) {
+            this.smaps = data.sort((a, b) => {
+                return a.name.localeCompare(b.name)
             })
+        }
     }
 }
 </script>

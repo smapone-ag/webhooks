@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="box token-input" :class="{'token-entered': token}">
+        <div class="box token-input" :class="{'token-entered': api}">
             Enter your smapOne API token here<br>
             <input type="text" v-model="token">
             
@@ -13,12 +13,13 @@
                 </ul>    
             </div>
         </div>
-        <smap-list v-if="token" :token="token"></smap-list>
+        <smap-list v-if="api" :api="api"></smap-list>
     </div>
 </template>
 
 <script>
 import SmapList from './components/SmapList.vue';
+import Api from './smapjs/Api.js';
 
 export default {
     name: 'App',
@@ -27,18 +28,21 @@ export default {
     },
     data() {
         return {
-            token: null
+            token: null,
+            api: null
         }
     },
     async created() {
         // Parse URL param
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+        const queryString = window.location.search
+        const urlParams = new URLSearchParams(queryString)
         
         // Parse token parameter
         if(urlParams.has('token')) {
-            this.token = urlParams.get('token');
+            this.token = urlParams.get('token')
+            this.api = new Api(this.token)
         }
+
     }
 }
 </script>

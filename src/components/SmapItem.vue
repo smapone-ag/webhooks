@@ -51,25 +51,21 @@ export default {
     },
     props: {
         smap: Object,
-        token: String
+        api: Object
     },
     async created() {
-        let url = `https://platform.smapone.com/Backend/intern/Smaps/${this.smap.smapId}/Notification/Data/Webhook?accessToken=${this.token}`
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                if(data === null) {
-                    this.webhook = false
-                } else {
-                    this.webhook = data
-                }
-            })
+        let data = await this.api.getWebhook(this.smap.smapId)
+        if(data === null) {
+            this.webhook = false
+        } else {
+            this.webhook = data
+        }
     },
     methods: {
         getReadableUrl(url) {
             const lead = url.substr(0, 32)
             const trail = url.substr(url.length-16, url.length)
-            return `${lead}...${trail}`;
+            return `${lead}...${trail}`
         }
     }
 }
