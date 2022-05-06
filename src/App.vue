@@ -44,8 +44,8 @@ export default {
     },
     watch: {
         // If token entered manually, not via URL
+        // eslint-disable-next-line no-unused-vars
         token(newToken, oldToken) {
-            newToken == oldToken // Fake action to supress errors
             this.api = new Api(this.token)
         }
     },
