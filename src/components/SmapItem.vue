@@ -54,14 +54,10 @@ export default {
         token: String
     },
     async created() {
-        console.log(this.smap)
-        console.log(`Checking webhook for smapId ${this.smap.smapId}`)
         let url = `https://platform.smapone.com/Backend/intern/Smaps/${this.smap.smapId}/Notification/Data/Webhook?accessToken=${this.token}`
-        // console.log(url)
         fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log('webhookdata', {data})
                 if(data === null) {
                     this.webhook = false
                 } else {

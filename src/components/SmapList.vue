@@ -37,11 +37,9 @@ export default {
         token: String
     },
     async created() {
-        console.log('Fetching smaps ...')
         fetch(`https://platform.smapone.com/Backend/v1/Smaps?accessToken=${this.token}`)
             .then(response => response.json())
             .then(data => {
-                console.log('Fetched smaps data', {data})
                 this.smaps = data.sort((a, b) => {
                     return a.name.localeCompare(b.name);
                 });
