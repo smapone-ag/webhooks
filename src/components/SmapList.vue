@@ -1,10 +1,26 @@
 <template>
     <div id="settings" class="box">
-        <span class="filter" @click="setFilter(false)">all smaps</span>
-        <span class="filter" @click="setFilter('webhook')">smaps with webhooks</span>
-        <span class="filter" @click="setFilter('post')"><code class="method method-post">post</code> webhooks</span>
-        <span class="filter" @click="setFilter('get')"><code class="method method-get">get</code> webhooks</span>
-        <span class="filter" @click="setFilter('no-webhook')">smaps without webhook</span>
+        <input type="text" v-model="filter.name">
+        <span
+            class="filter"
+            :class="{'active': filter.group==false}"
+            @click="setFilterGroup(false)">all</span>
+        <span
+            class="filter"
+            :class="{'active': filter.group=='webhook'}"
+            @click="setFilterGroup('webhook')">with webhook</span>
+        <span
+            class="filter"
+            :class="{'active': filter.group=='post'}"
+            @click="setFilterGroup('post')"><code class="method method-post">post</code></span>
+        <span
+            class="filter"
+            :class="{'active': filter.group=='get'}"
+            @click="setFilterGroup('get')"><code class="method method-get">get</code></span>
+        <span
+            class="filter"
+            :class="{'active': filter.group=='no-webhook'}"
+            @click="setFilterGroup('no-webhook')">no webhook</span>
     </div>
     <div class="box">
         <smap-item
@@ -29,7 +45,10 @@ export default {
     },
     data() {
         return {
-            filter: false,
+            filter: {
+                name: null,
+                group: false
+            },
             smaps: []
         }
     },
@@ -45,8 +64,8 @@ export default {
         }
     },
     methods: {
-        setFilter: function(filter) {
-            this.filter = filter
+        setFilterGroup: function(group) {
+            this.filter.group = group
         }
     }
 }
@@ -54,7 +73,6 @@ export default {
 
 <style scoped>
 #settings {
-    place-content: center;
     display: flex;
     font-size: .75rem;
     padding-top: 1rem;
@@ -64,7 +82,19 @@ export default {
     align-items: center;
 }
 
-.settings span {
+#settings > input {
+    font-size: .6rem;
+    color: #444;
+    padding: 0.2rem 0.4rem;
+}
+
+#settings > .filter {
     cursor: default;
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+#settings > .filter.active {
+    border-bottom: 3px solid white;
 }
 </style>

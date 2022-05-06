@@ -51,10 +51,7 @@ export default {
     },
     props: {
         api: Object,
-        filter: {
-            type: [String, Boolean],
-            default: false
-        },
+        filter: Object,
         smap: Object
     },
     async created() {
@@ -67,23 +64,32 @@ export default {
     },
     computed: {
         checkFilter() {
-            if(!this.filter) {
-                return true
+            let group = false
+            if(!this.filter.group) {
+                group = true
             }
-            else if(this.filter == 'webhook' && this.webhook !== false && this.webhook !== null) {
-                return true
+            else if(this.filter.group == 'webhook' && this.webhook !== false && this.webhook !== null) {
+                group = true
             }
-            else if(this.filter == 'no-webhook' && this.webhook === false) {
-                return true
+            else if(this.filter.group == 'no-webhook' && this.webhook === false) {
+                group = true
             }
-            else if(this.filter == 'get' && this.webhook && this.webhook.options == 'HttpGet') {
-                return true
+            else if(this.filter.group == 'get' && this.webhook && this.webhook.options == 'HttpGet') {
+                group = true
             }
-            else if(this.filter == 'post' && this.webhook && this.webhook.options == 'HttpPost') {
-                return true
+            else if(this.filter.group == 'post' && this.webhook && this.webhook.options == 'HttpPost') {
+                group = true
             }
 
-            return false
+            let name = false
+            if(this.filter.name === null) {
+                name = true
+            }
+            else if(this.smap.name.toLowerCase().includes(this.filter.name.toLowerCase())) {
+                name = true
+            }
+
+            return group && name
         }
     },
     methods: {
