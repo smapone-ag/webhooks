@@ -1,3 +1,5 @@
 module.exports = {
-    publicPath: "/webhooks"
+    publicPath: process.env.NODE_ENV === 'netlify'
+        ? '/'
+        : '/webhooks'
 };
