@@ -1,19 +1,18 @@
 <template>
-    <!-- <div class="box settings">
-        <select name="filter-webhooks" id="filter-webhooks">
-            <option value="all">show all</option>
-            <option value="all-webhooks">all webhooks</option>
-            <option value="all-post-webhooks">all POST webhooks</option>
-            <option value="all-get-webhooks">all GET webhooks</option>
-            <option value="no-webhooks">smaps without webhook</option>
-        </select>
-    </div> -->
+    <div id="settings" class="box">
+        <span class="filter" @click="setFilter(false)">all smaps</span>
+        <span class="filter" @click="setFilter('webhook')">smaps with webhooks</span>
+        <span class="filter" @click="setFilter('post')"><code class="method method-post">post</code> webhooks</span>
+        <span class="filter" @click="setFilter('get')"><code class="method method-get">get</code> webhooks</span>
+        <span class="filter" @click="setFilter('no-webhook')">smaps without webhook</span>
+    </div>
     <div class="box">
         <smap-item
             v-for="smap in smaps"
             :key="smap.smapId"
             :smap="smap"
             :api="api"
+            :filter="filter"
             class="smap"
         >
         </smap-item>
@@ -30,6 +29,7 @@ export default {
     },
     data() {
         return {
+            filter: false,
             smaps: []
         }
     },
@@ -43,15 +43,28 @@ export default {
                 return a.name.localeCompare(b.name)
             })
         }
+    },
+    methods: {
+        setFilter: function(filter) {
+            this.filter = filter
+        }
     }
 }
 </script>
 
 <style scoped>
-.settings {
+#settings {
     place-content: center;
-    font-size: 1rem;
+    display: flex;
+    font-size: .75rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.settings span {
+    cursor: default;
 }
 </style>

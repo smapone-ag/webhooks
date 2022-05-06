@@ -125,6 +125,20 @@ a:hover {
     margin-top: 3rem;
 }
 
+.method {
+    display: inline-block;
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.method-get {
+    background-color: blue;
+}
+
+.method-post {
+    background-color: green;
+}
+
 /* Responsiveness */
 /* @media (max-width: 420px) {
     .message > .body {

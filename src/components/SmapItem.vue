@@ -1,5 +1,5 @@
 <template>
-    <div v-if="smap" class="smap" :class="{
+    <div v-if="smap && checkFilter" class="smap" :class="{
         webhook: webhook,
         fetching: webhook === null,
         'no-webhook': webhook === false,
@@ -50,8 +50,12 @@ export default {
         }
     },
     props: {
-        smap: Object,
-        api: Object
+        api: Object,
+        filter: {
+            type: [String, Boolean],
+            default: false
+        },
+        smap: Object
     },
     async created() {
         let data = await this.api.getWebhook(this.smap.smapId)
@@ -59,6 +63,27 @@ export default {
             this.webhook = false
         } else {
             this.webhook = data
+        }
+    },
+    computed: {
+        checkFilter() {
+            if(!this.filter) {
+                return true
+            }
+            else if(this.filter == 'webhook' && this.webhook !== false && this.webhook !== null) {
+                return true
+            }
+            else if(this.filter == 'no-webhook' && this.webhook === false) {
+                return true
+            }
+            else if(this.filter == 'get' && this.webhook && this.webhook.options == 'HttpGet') {
+                return true
+            }
+            else if(this.filter == 'post' && this.webhook && this.webhook.options == 'HttpPost') {
+                return true
+            }
+
+            return false
         }
     },
     methods: {
@@ -117,19 +142,5 @@ export default {
 .webhook-url {
     margin-left: .4rem;
     font-size: 1.2rem;
-}
-
-.method {
-    display: inline-block;
-    font-size: 1rem;
-    padding: 0.2rem 0.5rem;
-}
-
-.method-get {
-    background-color: blue;
-}
-
-.method-post {
-    background-color: green;
 }
 </style>
