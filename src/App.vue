@@ -40,10 +40,15 @@ export default {
         // Parse token parameter
         if(urlParams.has('token')) {
             this.token = urlParams.get('token')
+        }
+    },
+    watch: {
+        // If token entered manually, not via URL
+        token(newToken, oldToken) {
+            newToken == oldToken // Fake action to supress errors
             this.api = new Api(this.token)
         }
-
-    }
+    },
 }
 </script>
 
