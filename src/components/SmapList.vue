@@ -43,16 +43,7 @@ export default {
             .then(data => {
                 console.log('Fetched smaps data', {data})
                 this.smaps = data.sort((a, b) => {
-                    let nameA = a.name.toLowerCase(),
-                        nameB = b.name.toLowerCase();
-
-                    if (nameA < nameB) {
-                        return -1;
-                    }
-                    if (nameA > nameB) {
-                        return 1;
-                    }
-                    return 0;
+                    return a.name.localeCompare(b.name);
                 });
 
             })
