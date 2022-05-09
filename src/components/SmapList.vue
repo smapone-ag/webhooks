@@ -1,6 +1,6 @@
 <template>
     <div id="settings" class="box">
-        <input type="text" v-model="filter.name">
+        <input type="text" v-model="filter.name" placeholder="Search smap name">
         <span
             class="filter"
             :class="{'active': filter.group==false}"

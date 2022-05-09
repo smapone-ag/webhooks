@@ -2,7 +2,7 @@
     <div class="container">
         <div v-if="token === null" class="box token-input">
             Enter your smapOne API token here<br>
-            <input type="text" v-model="token">
+            <input type="text" v-model="token" placeholder="smapOne API token">
             
             <div class="token-info">
                 Is it safe to enter token here?
