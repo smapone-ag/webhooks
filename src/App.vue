@@ -1,10 +1,10 @@
 <template>
     <div class="container">
-        <div class="box token-input" :class="{'token-entered': api}">
+        <div v-if="token === null" class="box token-input">
             Enter your smapOne API token here<br>
             <input type="text" v-model="token">
             
-            <div v-if="token === null" class="token-info">
+            <div class="token-info">
                 Is it safe to enter token here?
 
                 <ul>
@@ -115,13 +115,6 @@ a:hover {
 .box.token-input {
     place-content: center;
     padding: 4rem;
-}
-
-.box.token-entered {
-    color: #999;
-    font-size: 1rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
 }
 
 .token-info {
