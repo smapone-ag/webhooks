@@ -3,7 +3,7 @@
         <input type="text" v-model="filter.name" placeholder="Search smap name">
         <span
             class="filter"
-            :class="{'active': filter.group==false}"
+            :class="{'active': filter.group===false}"
             @click="setFilterGroup(false)">all</span>
         <span
             class="filter"
@@ -24,12 +24,12 @@
     </div>
     <div class="box">
         <smap-item
-            v-for="smap in smaps"
+            v-for="smap in filteredSmaps"
             :key="smap.smapId"
             :smap="smap"
             :api="api"
-            :filter="filter"
             class="smap"
+            @setWebhook="onSetWebhook"
         >
         </smap-item>
     </div>
@@ -63,9 +63,46 @@ export default {
             })
         }
     },
+    computed: {
+        filteredSmaps() {
+            const filter = this.filter
+            return this.smaps.filter(function(smap) {
+                let group = false
+                if(!filter.group) {
+                    group = true
+                }
+                else if(filter.group == 'webhook' && smap.webhook !== false && smap.webhook !== null) {
+                    group = true
+                }
+                else if(filter.group == 'no-webhook' && smap.webhook === false) {
+                    group = true
+                }
+                else if(filter.group == 'get' && smap.webhook && smap.webhook.options == 'HttpGet') {
+                    group = true
+                }
+                else if(filter.group == 'post' && smap.webhook && smap.webhook.options == 'HttpPost') {
+                    group = true
+                }
+
+                let name = false
+                if(filter.name === null || smap.name.toLowerCase().includes(filter.name.toLowerCase())) {
+                    name = true
+                }
+                return group && name
+            })
+        }
+    },
     methods: {
         setFilterGroup: function(group) {
             this.filter.group = group
+        },
+        onSetWebhook: function(smapId, webhook) {
+            console.log('child has called parent', smapId)
+            let find = this.smaps.find(smap => smap.smapId == smapId)
+            console.log({find})
+            if(typeof find !== 'undefined') {
+                find.webhook = webhook
+            }
         }
     }
 }
