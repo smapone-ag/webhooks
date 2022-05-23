@@ -120,13 +120,14 @@ export default {
 }
 
 #settings > input {
+    cursor: pointer;
     font-size: .6rem;
     color: #444;
     padding: 0.2rem 0.4rem;
 }
 
 #settings > .filter {
-    cursor: default;
+    cursor: pointer;
     margin-left: 1rem;
     margin-right: 1rem;
 }

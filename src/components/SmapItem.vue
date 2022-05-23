@@ -84,7 +84,7 @@ export default {
 
 .smap-name {
     font-size: 1.5rem;
-    cursor: default;
+    cursor: pointer;
     margin-bottom: .5rem;
 }
 
