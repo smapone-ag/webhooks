@@ -11,21 +11,27 @@
         
         <div class="info-fetching" v-if="smap.webhook === null">fetching...</div>
 
-        <div class="smap-meta" v-if="showMeta">
-            <div><code>{{ smap.smapId }}</code></div>
-            <hr>
-            <div>Last changed: {{ smap.lastChanged }}</div>
-            <div v-if="smap.lastPublishedVersion">Version: {{ smap.lastPublishedVersion.version }}</div>
-            <hr>
-            <div>Installations: {{ smap.installationsCount }}</div>
-            <div>User licenses: {{ smap.userLicenseCount }}</div>
-            <div>Data entries: {{ smap.totalDataCount }}</div>
-            <div v-if="smap.webhook">
+        <!-- <Transition
+            :duration="{ enter: 250, leave: 100 }"
+            enter-active-class="animate__animated animate__zoomIn"
+            leave-active-class="animate__animated animate__zoomOut"
+        > -->
+            <div class="smap-meta" v-if="showMeta">
+                <div><code>{{ smap.smapId }}</code></div>
                 <hr>
-                <div>Webhook URL</div>
-                <div><input type="text" :value="smap.webhook.serverUrl"></div>
+                <div>Last changed: {{ smap.lastChanged }}</div>
+                <div v-if="smap.lastPublishedVersion">Version: {{ smap.lastPublishedVersion.version }}</div>
+                <hr>
+                <div>Installations: {{ smap.installationsCount }}</div>
+                <div>User licenses: {{ smap.userLicenseCount }}</div>
+                <div>Data entries: {{ smap.totalDataCount }}</div>
+                <div v-if="smap.webhook">
+                    <hr>
+                    <div>Webhook URL</div>
+                    <div><input type="text" :value="smap.webhook.serverUrl"></div>
+                </div>
             </div>
-        </div>
+        <!-- </Transition> -->
 
         <div v-if="smap.webhook">
             <div v-if="smap.webhook.options">
@@ -119,4 +125,6 @@ export default {
     margin-left: .4rem;
     font-size: 1.2rem;
 }
+
+@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
 </style>
