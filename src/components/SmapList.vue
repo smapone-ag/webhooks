@@ -97,9 +97,7 @@ export default {
             this.filter.group = group
         },
         onSetWebhook: function(smapId, webhook) {
-            console.log('child has called parent', smapId)
             let find = this.smaps.find(smap => smap.smapId == smapId)
-            console.log({find})
             if(typeof find !== 'undefined') {
                 find.webhook = webhook
             }
