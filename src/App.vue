@@ -1,29 +1,34 @@
 <template>
-  <div class="container">
-    <div v-if="token === null" class="box token-input">
-      Enter your smapOne API token here<br />
-      <input type="text" v-model="token" placeholder="smapOne API token" />
+    <div class="container">
+        <div v-if="token === null" class="box token-input">
+            Enter your smapOne API token here<br />
+            <input
+                type="text"
+                v-model="token"
+                placeholder="smapOne API token"
+            />
 
-      <div class="token-info">
-        Is it safe to enter token here?
+            <div class="token-info">
+                Is it safe to enter token here?
 
-        <ul>
-          <li>
-            This script runs on github, only allows frontend, no backend
-            services, you can track all calls done by the frontend.
-          </li>
-          <li>
-            If you don't trust, feel free to
-            <a href="https://github.com/smappetizer/webhooks"
-              >download the application</a
-            >
-            in order to compile and run by yourself.
-          </li>
-        </ul>
-      </div>
+                <ul>
+                    <li>
+                        This script runs on github, only allows frontend, no
+                        backend services, you can track all calls done by the
+                        frontend.
+                    </li>
+                    <li>
+                        If you don't trust, feel free to
+                        <a href="https://github.com/smappetizer/webhooks"
+                            >download the application</a
+                        >
+                        in order to compile and run by yourself.
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <smap-list v-if="api" :api="api"></smap-list>
     </div>
-    <smap-list v-if="api" :api="api"></smap-list>
-  </div>
 </template>
 
 <script>
@@ -31,33 +36,33 @@ import SmapList from './components/SmapList.vue';
 import Api from './smapjs/Api.js';
 
 export default {
-  name: 'App',
-  components: {
-    SmapList,
-  },
-  data() {
-    return {
-      token: null,
-      api: null,
-    };
-  },
-  async created() {
-    // Parse URL param
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-
-    // Parse token parameter
-    if (urlParams.has('token')) {
-      this.token = urlParams.get('token');
-    }
-  },
-  watch: {
-    // If token entered manually, not via URL
-    // eslint-disable-next-line no-unused-vars
-    token(newToken, oldToken) {
-      this.api = new Api(this.token);
+    name: 'App',
+    components: {
+        SmapList,
     },
-  },
+    data() {
+        return {
+            token: null,
+            api: null,
+        };
+    },
+    async created() {
+        // Parse URL param
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        // Parse token parameter
+        if (urlParams.has('token')) {
+            this.token = urlParams.get('token');
+        }
+    },
+    watch: {
+        // If token entered manually, not via URL
+        // eslint-disable-next-line no-unused-vars
+        token(newToken, oldToken) {
+            this.api = new Api(this.token);
+        },
+    },
 };
 </script>
 
@@ -68,84 +73,84 @@ export default {
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  background-color: #000;
-  color: #efefef;
-  font-family: 'Fira Code', 'Courier new', monospace;
-  font-size: 20px;
-  letter-spacing: -2px;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 1rem;
-  padding-bottom: 0;
+    background-color: #000;
+    color: #efefef;
+    font-family: 'Fira Code', 'Courier new', monospace;
+    font-size: 20px;
+    letter-spacing: -2px;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 1rem;
+    padding-bottom: 0;
 }
 
 a {
-  color: var(--smapone-blue-color);
-  text-decoration: none;
+    color: var(--smapone-blue-color);
+    text-decoration: none;
 }
 a:hover {
-  border-bottom: 1px solid var(--smapone-blue-color);
+    border-bottom: 1px solid var(--smapone-blue-color);
 }
 
 :root {
-  /* Colors */
-  --smapone-blue-color: #249fcd;
-  --background-color: #1b1b1b;
-  --background-light-color: #888;
-  --text-gray-color: #444;
-  --text-color: #fff;
+    /* Colors */
+    --smapone-blue-color: #249fcd;
+    --background-color: #1b1b1b;
+    --background-light-color: #888;
+    --text-gray-color: #444;
+    --text-color: #fff;
 
-  /* Widths */
-  --message-border-width: 0.5rem;
+    /* Widths */
+    --message-border-width: 0.5rem;
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  place-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    place-items: center;
 }
 
 .box {
-  display: flex;
-  background-color: #444;
-  margin-bottom: 0.3rem;
-  padding: 0;
-  overflow-x: hidden;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  max-width: 680px;
-  width: 100%;
+    display: flex;
+    background-color: #444;
+    margin-bottom: 0.3rem;
+    padding: 0;
+    overflow-x: hidden;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    max-width: 680px;
+    width: 100%;
 }
 
 .box.token-input {
-  place-content: center;
-  padding: 4rem;
+    place-content: center;
+    padding: 4rem;
 }
 
 .token-info {
-  color: #999;
-  font-size: 1rem;
-  margin-top: 3rem;
+    color: #999;
+    font-size: 1rem;
+    margin-top: 3rem;
 }
 
 .method {
-  display: inline-block;
-  font-size: 1rem;
-  padding: 0.2rem 0.5rem;
+    display: inline-block;
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
 }
 
 .method-get {
-  background-color: blue;
+    background-color: blue;
 }
 
 .method-post {
-  background-color: green;
+    background-color: green;
 }
 
 /* Responsiveness */
