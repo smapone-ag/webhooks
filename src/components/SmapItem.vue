@@ -1,38 +1,42 @@
 <template>
     <div v-if="smap" class="smap" :class="{
-        webhook: webhook,
-        fetching: webhook === null,
-        'no-webhook': webhook === false,
+        webhook: smap.webhook,
+        fetching: smap.webhook === null,
+        'no-webhook': smap.webhook === false,
     }">
         <div class="smap-name" @click="showMeta = !showMeta">
             {{ smap.name }}
-            <span class="info-no-webhook" v-if="webhook === false">no webhook</span>
+            <span class="info-no-webhook" v-if="smap.webhook === false">no webhook</span>
         </div>
         
-        <div class="info-fetching" v-if="webhook === null">fetching...</div>
+        <div class="info-fetching" v-if="smap.webhook === null">fetching...</div>
 
         <div class="smap-meta" v-if="showMeta">
-            <div><code>{{ smap.smapId }}</code></div>
-            <hr>
-            <div>Last changed: {{ smap.lastChanged }}</div>
-            <div v-if="smap.lastPublishedVersion">Version: {{ smap.lastPublishedVersion.version }}</div>
-            <hr>
-            <div>Installations: {{ smap.installationsCount }}</div>
-            <div>User licenses: {{ smap.userLicenseCount }}</div>
-            <div>Data entries: {{ smap.totalDataCount }}</div>
-            <div v-if="webhook">
-                <hr>
+            <div class="smap-meta-box">smapID <code>{{ smap.smapId }}</code></div>
+            
+            <div class="smap-meta-box">
+                <div>Last changed <code>{{ getDate(smap.lastChanged) }}</code></div>
+                <div v-if="smap.lastPublishedVersion">Version <code>{{ smap.lastPublishedVersion.version }}</code></div>
+            </div>
+            
+            <div class="smap-meta-box smap-meta-cols">
+                <div class="smap-meta-box">Licenses <code>{{ smap.userLicenseCount }}</code></div>
+                <div class="smap-meta-box">Installations <code>{{ smap.installationsCount }}</code></div>
+                <div class="smap-meta-box">Data entries <code>{{ smap.totalDataCount }}</code></div>
+            </div>
+
+            <div v-if="smap.webhook" class="smap-meta-box">
                 <div>Webhook URL</div>
-                <div><input type="text" :value="webhook.serverUrl"></div>
+                <div><input type="text" :value="smap.webhook.serverUrl"></div>
             </div>
         </div>
 
-        <div v-if="webhook">
-            <div v-if="webhook.options">
+        <div v-if="smap.webhook">
+            <div v-if="smap.webhook.options">
                 <div>
-                    <code v-if="webhook.options === 'HttpGet'" class="method method-get">get</code>
-                    <code v-if="webhook.options === 'HttpPost'" class="method method-post">post</code>
-                    <span class="webhook-url">{{ getReadableUrl(webhook.serverUrl) }}</span>
+                    <code v-if="smap.webhook.options === 'HttpGet'" class="method method-get">get</code>
+                    <code v-if="smap.webhook.options === 'HttpPost'" class="method method-post">post</code>
+                    <span class="webhook-url">{{ getReadableUrl(smap.webhook.serverUrl) }}</span>
                 </div>
             </div>
         </div>
@@ -42,38 +46,34 @@
 <script>
 export default {
     name: 'SmapItem',
+    emits: ["setWebhook"],
     // components: {},
     data() {
         return {
-            webhook: null,
             showMeta: false
         }
     },
     props: {
-        smap: Object,
-        token: String
+        api: Object,
+        smap: Object
     },
     async created() {
-        console.log(this.smap)
-        console.log(`Checking webhook for smapId ${this.smap.smapId}`)
-        let url = `https://platform.smapone.com/Backend/intern/Smaps/${this.smap.smapId}/Notification/Data/Webhook?accessToken=${this.token}`
-        // console.log(url)
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                console.log('webhookdata', {data})
-                if(data === null) {
-                    this.webhook = false
-                } else {
-                    this.webhook = data
-                }
-            })
+        let data = await this.api.getWebhook(this.smap.smapId)
+        if(data === null) {
+            this.$emit('setWebhook', this.smap.smapId, false)
+        } else {
+            this.$emit('setWebhook', this.smap.smapId, data)
+        }
     },
     methods: {
         getReadableUrl(url) {
             const lead = url.substr(0, 32)
             const trail = url.substr(url.length-16, url.length)
-            return `${lead}...${trail}`;
+            return `${lead}...${trail}`
+        },
+        getDate(date) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' }
+            return new Date(date).toLocaleDateString("en-US", options)
         }
     }
 }
@@ -91,7 +91,7 @@ export default {
 
 .smap-name {
     font-size: 1.5rem;
-    cursor: default;
+    cursor: pointer;
     margin-bottom: .5rem;
 }
 
@@ -104,6 +104,32 @@ export default {
 
 .smap-meta input {
     width: 100%;
+}
+
+.smap-meta code {
+    color: rgb(255, 140, 140);
+}
+
+.smap-meta-cols {
+    display: flex;
+}
+
+.smap-meta-cols code {
+    font-size: 2.3rem
+}
+
+.smap-meta-box {
+    padding: 1rem;
+    background: black;
+    margin: .5rem 0;
+}
+
+.smap-meta-cols .smap-meta-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    padding: 0;
 }
 
 /* .webhook {} */
@@ -125,19 +151,5 @@ export default {
 .webhook-url {
     margin-left: .4rem;
     font-size: 1.2rem;
-}
-
-.method {
-    display: inline-block;
-    font-size: 1rem;
-    padding: 0.2rem 0.5rem;
-}
-
-.method-get {
-    background-color: blue;
-}
-
-.method-post {
-    background-color: green;
 }
 </style>

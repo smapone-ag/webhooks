@@ -1,10 +1,10 @@
 <template>
     <div class="container">
-        <div class="box token-input" :class="{'token-entered': token}">
+        <div v-if="token === null" class="box token-input">
             Enter your smapOne API token here<br>
-            <input type="text" v-model="token">
+            <input type="text" v-model="token" placeholder="smapOne API token">
             
-            <div v-if="token === null" class="token-info">
+            <div class="token-info">
                 Is it safe to enter token here?
 
                 <ul>
@@ -13,12 +13,13 @@
                 </ul>    
             </div>
         </div>
-        <smap-list v-if="token" :token="token"></smap-list>
+        <smap-list v-if="api" :api="api"></smap-list>
     </div>
 </template>
 
 <script>
 import SmapList from './components/SmapList.vue';
+import Api from './smapjs/Api.js';
 
 export default {
     name: 'App',
@@ -27,19 +28,27 @@ export default {
     },
     data() {
         return {
-            token: null
+            token: null,
+            api: null
         }
     },
     async created() {
         // Parse URL param
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+        const queryString = window.location.search
+        const urlParams = new URLSearchParams(queryString)
         
         // Parse token parameter
         if(urlParams.has('token')) {
-            this.token = urlParams.get('token');
+            this.token = urlParams.get('token')
         }
-    }
+    },
+    watch: {
+        // If token entered manually, not via URL
+        // eslint-disable-next-line no-unused-vars
+        token(newToken, oldToken) {
+            this.api = new Api(this.token)
+        }
+    },
 }
 </script>
 
@@ -108,17 +117,24 @@ a:hover {
     padding: 4rem;
 }
 
-.box.token-entered {
-    color: #999;
-    font-size: 1rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-
 .token-info {
     color: #999;
     font-size: 1rem;
     margin-top: 3rem;
+}
+
+.method {
+    display: inline-block;
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+}
+
+.method-get {
+    background-color: blue;
+}
+
+.method-post {
+    background-color: green;
 }
 
 /* Responsiveness */
