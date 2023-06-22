@@ -19,9 +19,7 @@
                     </li>
                     <li>
                         If you don't trust, feel free to
-                        <a href="https://github.com/smappetizer/webhooks"
-                            >download the application</a
-                        >
+                        <a href="https://github.com/smappetizer/webhooks">download the application</a>
                         in order to compile and run by yourself.
                     </li>
                 </ul>

@@ -29,7 +29,7 @@
             :smap="smap"
             :api="api"
             class="smap"
-            @setWebhook="onSetWebhook"
+            @displayWebhook="onDisplayWebhook"
         >
         </smap-item>
     </div>
@@ -96,7 +96,7 @@ export default {
         setFilterGroup: function(group) {
             this.filter.group = group
         },
-        onSetWebhook: function(smapId, webhook) {
+        onDisplayWebhook: function(smapId, webhook) {
             let find = this.smaps.find(smap => smap.smapId == smapId)
             if(typeof find !== 'undefined') {
                 find.webhook = webhook
